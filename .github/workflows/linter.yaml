@@ -26,14 +26,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Cache pip dependencies
-        uses: actions/cache@v4.2.0
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-${{ matrix.python-version }}-
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install flake8
           pip install -r requirements.txt
@@ -41,8 +41,24 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
-      - name: Run flake8
+      - name: Run flake8 (Python linting)
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
         run: |
           flake8 . --count --max-line-length=120 --statistics
+
+      - name: Install C linter (cppcheck)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+
+      - name: Cache apt lists
+        uses: actions/cache@v4
+        with:
+          path: /var/lib/apt/lists
+          key: ${{ runner.os }}-apt-lists-${{ hashFiles('CMakeLists.txt') }}
+
+      - name: Run cppcheck (C linting)
+        run: |
+          # Lint all C files in the repository.
+          cppcheck --enable=warning,style,performance,portability --inconclusive --quiet .

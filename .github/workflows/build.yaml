@@ -1,0 +1,51 @@
+name: Build Project
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Cache apt lists to speed up apt-get update.
+      - name: Cache APT lists
+        uses: actions/cache@v3
+        with:
+          path: /var/lib/apt/lists
+          key: ${{ runner.os }}-apt-lists-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-lists-
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential libmodbus libmodbus-devel
+
+      # Cache the CMake build directory to speed up incremental builds.
+      - name: Cache CMake build directory
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-cmake-build-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-build-
+
+      - name: Configure CMake
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+
+      - name: Build Project
+        run: |
+          cd build
+          cmake --build .
