@@ -1,0 +1,17 @@
+# Python cache files
+__pycache__/
+
+# Visual Studio code files
+.vscode/
+
+# CMake build files
+build/
+*.cmake/
+CMakeFiles/
+Makefile
+
+# Libraries except these which are in 'ui/resources'
+*.dll*
+*.so*
+!ui/resources/*.so*
+!ui/resources/*.dll*
