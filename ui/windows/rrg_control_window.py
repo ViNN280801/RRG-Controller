@@ -9,7 +9,6 @@ This module implements a main window that contains:
  - A QLineEdit with a float validator for entering a flow setpoint.
  - A button for sending the setpoint command.
  - A text area for displaying the current flow.
- 
 If fewer than two available serial ports are detected, the UI is disabled.
 All device commands are routed through an instance of RRGController.
 """

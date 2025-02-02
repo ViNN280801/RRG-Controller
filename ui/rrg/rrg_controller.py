@@ -72,7 +72,7 @@ class RRGController:
                 # Connection failed; ensure _rrg is set to None.
                 self._rrg = None
                 return self.ERROR_RRG_CONNECT_FAILED
-        except Exception as e:
+        except Exception:
             # Log exception details if needed.
             self._rrg = None
             return self.ERROR_RRG_CONNECT_FAILED
