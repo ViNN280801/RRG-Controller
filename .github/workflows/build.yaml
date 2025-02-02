@@ -28,7 +28,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential libmodbus libmodbus-devel
+          sudo apt-get install -y cmake build-essential libmodbus-dev
 
       # Cache the CMake build directory to speed up incremental builds.
       - name: Cache CMake build directory
