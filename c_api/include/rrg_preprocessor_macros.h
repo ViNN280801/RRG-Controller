@@ -1,10 +1,7 @@
 #ifndef RRG_PREPROCESSOR_MACROS_H
 #define RRG_PREPROCESSOR_MACROS_H
 
-/**
- * @def RRG_RESTRICT
- * @brief Cross-platform definition of the `restrict` keyword for compiler optimization.
- */
+/* Cross-platform definition of the `restrict` keyword for compiler optimization. */
 #if defined(_MSC_VER)
 #define RRG_RESTRICT __restrict
 #elif defined(__GNUC__) || defined(__clang__)
@@ -56,6 +53,22 @@
 #define RRG_HOT
 #define RRG_PURE
 #define RRG_CONST
+#endif
+
+#ifdef __linux__
+#define RRG_COMMON_PRETTY_FUNC __PRETTY_FUNCTION__
+#elif defined(_WIN32)
+#define RRG_COMMON_PRETTY_FUNC __FUNCSIG__
+#endif
+
+#ifdef RRG_DEBUG
+#define RRG_MODBUS_DEBUG_MSG fprintf(stderr, "RRG DEBUG: %s: %s\n", RRG_COMMON_PRETTY_FUNC, modbus_strerror(errno));
+#define RRG_DEBUG_MSG(msg) fprintf(stderr, "RRG DEBUG: %s: %s\n", RRG_COMMON_PRETTY_FUNC, msg);
+#define RRG_DEBUG_GET_LAST_ERR fprintf(stderr, RRG_GetLastError());
+#else
+#define RRG_MODBUS_DEBUG_MSG
+#define RRG_DEBUG_MSG(msg)
+#define RRG_DEBUG_GET_LAST_ERR
 #endif
 
 #endif // !RRG_PREPROCESSOR_MACROS_H

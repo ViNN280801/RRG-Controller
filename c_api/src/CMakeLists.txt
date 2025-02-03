@@ -1,7 +1,7 @@
 # c_api/src/CMakeLists.txt
 
 set(RRG_INCLUDE_DIRS ../include)
-set(RRG_SOURCES_LIST rrg.c)
+set(RRG_SOURCES_LIST rrg.c utils.c)
 set(LIB_RRG rrg)
 
 add_library(${LIB_RRG} SHARED ${RRG_SOURCES_LIST})
