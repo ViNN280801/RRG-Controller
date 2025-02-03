@@ -8,27 +8,11 @@
 // Global error variable definition.
 int RRG_GlobalError = RRG_OK;
 
-/// @brief Resets the global 'RRG_GlobalError' to the status OK.
-static inline void _resetGlobalError() { RRG_GlobalError = RRG_OK; }
-
-/// @brief Sets the global 'RRG_GlobalError' to the specified error status.
-static inline void _setGlobalError(int error_code) { RRG_GlobalError = error_code; }
-
 int RRG_Init(const RRG_Config *RRG_RESTRICT config, RRG_Handle *RRG_RESTRICT handle)
 {
     // 1. Validate input parameters.
-    if (unlikely(!config))
-    {
-        RRG_DEBUG_MSG("'config' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (unlikely(!handle))
-    {
-        RRG_DEBUG_MSG("'handle' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
+    RRG_CHECK_PTR_WITH_RETURN(config);
+    RRG_CHECK_PTR_WITH_RETURN(handle);
 
     // 2. Initialize MODBUS-RTU context using default serial configuration.
     modbus_t *ctx = modbus_new_rtu(
@@ -78,18 +62,8 @@ int RRG_Init(const RRG_Config *RRG_RESTRICT config, RRG_Handle *RRG_RESTRICT han
 int RRG_SetFlow(RRG_Handle *RRG_RESTRICT handle, float setpoint)
 {
     // 1. Validate input parameters.
-    if (!handle)
-    {
-        RRG_DEBUG_MSG("'handle' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (!handle->modbus_ctx)
-    {
-        RRG_DEBUG_MSG("'handle->modbus_ctx' is NULL")
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
+    RRG_CHECK_PTR_WITH_RETURN(handle);
+    RRG_CHECK_PTR_WITH_RETURN(handle->modbus_ctx);
 
     // 2. Convert the floating-point setpoint value to an integer representation.
     // The MODBUS protocol stores 32-bit values across two 16-bit registers.
@@ -120,24 +94,9 @@ int RRG_SetFlow(RRG_Handle *RRG_RESTRICT handle, float setpoint)
 int RRG_GetFlow(RRG_Handle *RRG_RESTRICT handle, float *RRG_RESTRICT flow)
 {
     // 1. Validate input parameters.
-    if (!handle)
-    {
-        RRG_DEBUG_MSG("'handle' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (!handle->modbus_ctx)
-    {
-        RRG_DEBUG_MSG("'handle->modbus_ctx' is NULL")
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (!flow)
-    {
-        RRG_DEBUG_MSG("'flow' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
+    RRG_CHECK_PTR_WITH_RETURN(handle);
+    RRG_CHECK_PTR_WITH_RETURN(handle->modbus_ctx);
+    RRG_CHECK_PTR_WITH_RETURN(flow);
 
     // 2. Read 32-bit flow value from MODBUS register 2103.
     uint16_t data[2];
@@ -158,49 +117,11 @@ int RRG_GetFlow(RRG_Handle *RRG_RESTRICT handle, float *RRG_RESTRICT flow)
 int RRG_SetGas(RRG_Handle *RRG_RESTRICT handle, int gas_id)
 {
     // 1. Validate input parameters.
-    if (!handle)
-    {
-        RRG_DEBUG_MSG("'handle' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (!handle->modbus_ctx)
-    {
-        RRG_DEBUG_MSG("'handle->modbus_ctx' is NULL")
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
+    RRG_CHECK_PTR_WITH_RETURN(handle);
+    RRG_CHECK_PTR_WITH_RETURN(handle->modbus_ctx);
 
     // 2. Write gas ID to MODBUS register 2100.
     if (modbus_write_register(handle->modbus_ctx, MODBUS_REGISTER_GAS, gas_id) == MODBUS_ERR)
-    {
-        RRG_MODBUS_DEBUG_MSG;
-        _setGlobalError(ERROR_RRG_FAILED_WRITE_REGISTER);
-        return RRG_ERR;
-    }
-
-    _resetGlobalError();
-    return RRG_OK;
-}
-
-int RRG_Tare(RRG_Handle *RRG_RESTRICT handle)
-{
-    // 1. Validate input parameters.
-    if (!handle)
-    {
-        RRG_DEBUG_MSG("'handle' is NULL");
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-    if (!handle->modbus_ctx)
-    {
-        RRG_DEBUG_MSG("'handle->modbus_ctx' is NULL")
-        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
-        return RRG_ERR;
-    }
-
-    // 2. Write tare command to MODBUS register 39.
-    if (modbus_write_register(handle->modbus_ctx, MODBUS_REGISTER_TARE, 0xAA55) == MODBUS_ERR)
     {
         RRG_MODBUS_DEBUG_MSG;
         _setGlobalError(ERROR_RRG_FAILED_WRITE_REGISTER);
@@ -225,22 +146,22 @@ const char *RRG_GetLastError()
     switch (RRG_GlobalError)
     {
     case RRG_OK:
-        return "No error.\n";
+        return "No error.";
     case ERROR_RRG_FAILED_CONNECT:
-        return "Error: Connection to the MODBUS device failed.\n";
+        return "Error: Connection to the MODBUS device failed.";
     case ERROR_RRG_FAILED_CREATE_CONTEXT:
-        return "Error: Failed to create a MODBUS-RTU context.\n";
+        return "Error: Failed to create a MODBUS-RTU context.";
     case ERROR_RRG_FAILED_SET_SLAVE:
-        return "Error: Failed to set MODBUS slave ID.\n";
+        return "Error: Failed to set MODBUS slave ID.";
     case ERROR_RRG_FAILED_SET_TIMEOUT:
-        return "Error: Failed to set MODBUS response timeout.\n";
+        return "Error: Failed to set MODBUS response timeout.";
     case ERROR_RRG_FAILED_READ_REGISTER:
-        return "Error: Failed to read a MODBUS register.\n";
+        return "Error: Failed to read a MODBUS register.";
     case ERROR_RRG_FAILED_WRITE_REGISTER:
-        return "Error: Failed to write a MODBUS register.\n";
+        return "Error: Failed to write a MODBUS register.";
     case ERROR_RRG_INVALID_PARAMETER:
-        return "Error: Invalid parameter provided to function.\n";
+        return "Error: Invalid parameter provided to function.";
     default:
-        return "Unknown error occurred.\n";
+        return "Unknown error occurred.";
     }
 }

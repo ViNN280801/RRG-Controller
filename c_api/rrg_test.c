@@ -52,6 +52,9 @@ int main()
     // Register signal handler for SIGINT (Ctrl+C).
     signal(SIGINT, handle_sigint);
 
+    int *null=NULL;
+    RRG_CHECK_PTR_WITH_RETURN(null);
+
     char *port;
     RRG_Config config;
     char input[INPUT_BUFFER_SIZE];

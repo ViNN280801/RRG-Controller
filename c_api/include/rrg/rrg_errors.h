@@ -66,4 +66,10 @@ extern int RRG_GlobalError;
  */
 #define ERROR_RRG_INVALID_PARAMETER -1007
 
+/// @brief Resets the global 'RRG_GlobalError' to the status OK.
+static inline void _resetGlobalError() { RRG_GlobalError = RRG_OK; }
+
+/// @brief Sets the global 'RRG_GlobalError' to the specified error status.
+static inline void _setGlobalError(int error_code) { RRG_GlobalError = error_code; }
+
 #endif // !RRG_ERRORS_H

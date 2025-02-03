@@ -5,6 +5,63 @@
 #include "rrg_errors.h"
 #include "rrg_preprocessor_macros.h"
 
+/**
+ * @def RRG_CHECK_PTR(ptr, checking_result)
+ * @brief Macro for validating a pointer and handling null values.
+ *
+ * This macro is designed to check whether a given pointer is valid (i.e., not `NULL`).
+ * If the pointer is `NULL`, it logs a debug message, sets a global error variable,
+ * and assigns `RRG_ERR` to the specified return value. Otherwise, it assigns `RRG_OK`.
+ *
+ * @note This macro should be used in functions where pointer validation is required
+ *       before performing operations on the pointer. It ensures robust error handling
+ *       by setting an error status and providing debugging information.
+ *
+ * @param[in]  ptr     The pointer to be validated. If `NULL`, an error is logged.
+ * @param[out] checking_result  The variable to store the return status (`RRG_OK` or `RRG_ERR`).
+ *
+ * @warning Using this macro within control structures (e.g., `if` statements)
+ *          without enclosing it in curly braces `{}` may cause unintended behavior
+ *          due to its multi-line nature.
+ *
+ * @attention This macro modifies `checking_result` directly. Ensure `checking_result` is a valid
+ *            variable before passing it to the macro.
+ *
+ * @code
+ * // Example usage in a function:
+ * int process_data(void *data)
+ * {
+ *     int status;
+ *     RRG_CHECK_PTR(data, status);
+ *     if (status == RRG_ERR)
+ *         return status;
+ *
+ *     // Proceed with valid data
+ *     return RRG_OK;
+ * }
+ * @endcode
+ *
+ * @see _setGlobalError(), RRG_DEBUG_MSG()
+ */
+#define RRG_CHECK_PTR(ptr, checking_result)           \
+    if (!ptr)                                         \
+    {                                                 \
+        RRG_DEBUG_MSG("Detected NULL pointer")        \
+        _setGlobalError(ERROR_RRG_INVALID_PARAMETER); \
+        checking_result = RRG_ERR;                    \
+    }                                                 \
+    else                                              \
+        checking_result = RRG_OK;
+
+#define RRG_CHECK_PTR_WITH_RETURN(ptr)      \
+    do                                      \
+    {                                       \
+        int checking_result = RRG_OK;       \
+        RRG_CHECK_PTR(ptr, checking_result) \
+        if (checking_result == RRG_ERR)     \
+            return checking_result;         \
+    } while (0)
+
 RRG_BEGIN_DECLS
 
 /**
@@ -83,18 +140,6 @@ RRG_API int RRG_GetFlow(RRG_Handle *RRG_RESTRICT handle, float *RRG_RESTRICT flo
  * error code.
  */
 RRG_API int RRG_SetGas(RRG_Handle *RRG_RESTRICT handle, int gas_id);
-
-/**
- * @brief Performs a tare operation on the gas flow sensor.
- *
- * The tare function zeroes the sensor readings to correct for drift or residual
- * gas flow. This is particularly useful after installation or when
- * environmental conditions change.
- *
- * @param handle Pointer to an initialized `RRG_Handle` structure.
- * @return Returns `RRG_OK` on success, or an error code if the operation fails.
- */
-RRG_API int RRG_Tare(RRG_Handle *RRG_RESTRICT handle);
 
 /**
  * @brief Closes the connection to the gas regulator and frees resources.

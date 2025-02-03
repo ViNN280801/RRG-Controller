@@ -59,12 +59,20 @@
 #define RRG_COMMON_PRETTY_FUNC __PRETTY_FUNCTION__
 #elif defined(_WIN32)
 #define RRG_COMMON_PRETTY_FUNC __FUNCSIG__
+#else
+#define RRG_COMMON_PRETTY_FUNC __func__
 #endif
 
+#define RRG_STRINGIFY(x) RRG_STRINGIFY_IMPL(x)
+#define RRG_STRINGIFY_IMPL(x) #x
+
+#define RRG_DEBUG_FMT "RRG DEBUG: [File: %s, Line: %d, Function: %s]"
+#define RRG_DEBUG_ARGS __FILE__, __LINE__, RRG_COMMON_PRETTY_FUNC
+
 #ifdef RRG_DEBUG
-#define RRG_MODBUS_DEBUG_MSG fprintf(stderr, "RRG DEBUG: %s: %s\n", RRG_COMMON_PRETTY_FUNC, modbus_strerror(errno));
-#define RRG_DEBUG_MSG(msg) fprintf(stderr, "RRG DEBUG: %s: %s\n", RRG_COMMON_PRETTY_FUNC, msg);
-#define RRG_DEBUG_GET_LAST_ERR fprintf(stderr, RRG_GetLastError());
+#define RRG_MODBUS_DEBUG_MSG fprintf(stderr, RRG_DEBUG_FMT ": %s\n", RRG_DEBUG_ARGS, modbus_strerror(errno));
+#define RRG_DEBUG_MSG(msg) fprintf(stderr, RRG_DEBUG_FMT ": %s\n", RRG_DEBUG_ARGS, msg);
+#define RRG_DEBUG_GET_LAST_ERR fprintf(stderr, RRG_DEBUG_FMT ": %s\n", RRG_DEBUG_ARGS, RRG_GetLastError());
 #else
 #define RRG_MODBUS_DEBUG_MSG
 #define RRG_DEBUG_MSG(msg)
