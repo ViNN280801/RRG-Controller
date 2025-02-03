@@ -17,4 +17,5 @@ Makefile
 !ui/resources/*.dll*
 
 # Executable files
-rrg_test
+rrg_live_test
+relay_live_test
