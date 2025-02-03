@@ -15,3 +15,6 @@ Makefile
 *.so*
 !ui/resources/*.so*
 !ui/resources/*.dll*
+
+# Executable files
+rrg_test
