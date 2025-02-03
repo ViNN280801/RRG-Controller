@@ -8,6 +8,12 @@
 #define CONST_RRG_DEFAULT_PARITY 'N'
 
 /**
+ * @def CONST_RRG_DEFAULT_BAUDRATE
+ * @brief Default baudrate for the MODBUS-RTU communication for the RRG.
+ */
+#define CONST_RRG_DEFAULT_BAUDRATE 38400
+
+/**
  * @def CONST_RRG_DEFAULT_DATA_BITS
  * @brief Default number of data bits for MODBUS-RTU communication.
  */
