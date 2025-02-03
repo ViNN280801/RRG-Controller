@@ -100,8 +100,10 @@ int main()
             printf("Error setting flow: %s\n", RRG_GetLastError());
 
         float cur_flow = -1.0;
-        if (RRG_GetFlow(&handle, &cur_flow))
+        if (RRG_GetFlow(&handle, &cur_flow) == RRG_OK)
             printf("Current flow is: %.3f SCCM\n", cur_flow);
+        else
+            printf("Error getting current flow: %s\n", RRG_GetLastError());
     }
 
     // Cleanup
