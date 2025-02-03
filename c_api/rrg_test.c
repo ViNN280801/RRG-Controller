@@ -95,13 +95,13 @@ int main()
 
         // Set the flow value
         if (RRG_SetFlow(&handle, setpoint) == RRG_OK)
-        {
             printf("Flow successfully set to %.3f SCCM\n", setpoint);
-        }
         else
-        {
             printf("Error setting flow: %s\n", RRG_GetLastError());
-        }
+
+        float cur_flow = -1.0;
+        if (RRG_GetFlow(&handle, &cur_flow))
+            printf("Current flow is: %.3f SCCM\n", cur_flow);
     }
 
     // Cleanup
