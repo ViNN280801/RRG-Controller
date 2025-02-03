@@ -75,19 +75,24 @@ int main()
 
         printf("Found active port: %s\n", port);
 
-        // Try to establish connection
         if (RRG_Init(&config, &g_handle) != RRG_OK)
         {
-            printf("Failed to connect: %s\n", RRG_GetLastError());
+            RRG_DEBUG_GET_LAST_ERR;
             sleep(2);
             continue;
+        }
+
+        if (RRG_SetGas(&g_handle, 7) == RRG_OK)
+            printf("Gas set to Helium\n");
+        else
+        {
+            RRG_DEBUG_GET_LAST_ERR;
         }
 
         printf("Connected successfully to %s!\n", port);
         break;
     }
 
-    // Main loop for user input
     while (1)
     {
         printf("\nEnter flow setpoint (or type 'exit' to quit): ");
@@ -107,26 +112,21 @@ int main()
             continue;
         }
 
-        if (RRG_SetGas(&g_handle, 7) == RRG_OK)
-        {
-            RRG_DEBUG_MSG("Gas set to Helium\n");
-        }
+        // Set the flow value
+        if (RRG_SetFlow(&g_handle, setpoint) == RRG_OK)
+            printf("Flow successfully set to %.3f SCCM\n", setpoint);
         else
         {
             RRG_DEBUG_GET_LAST_ERR;
         }
 
-        // Set the flow value
-        if (RRG_SetFlow(&g_handle, setpoint) == RRG_OK)
-            printf("Flow successfully set to %.3f SCCM\n", setpoint);
-        else
-            printf("Error setting flow: %s\n", RRG_GetLastError());
-
         float cur_flow = -1.0;
         if (RRG_GetFlow(&g_handle, &cur_flow) == RRG_OK)
             printf("Current flow is: %.3f SCCM\n", cur_flow);
         else
-            printf("Error getting current flow: %s\n", RRG_GetLastError());
+        {
+            RRG_DEBUG_GET_LAST_ERR;
+        }
     }
 
     RRG_Close(&g_handle);

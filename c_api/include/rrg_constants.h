@@ -29,7 +29,7 @@
  * @def CONST_RRG_DEFAULT_TIMEOUT_MS
  * @brief Default timeout in milliseconds for MODBUS-RTU communication.
  */
-#define CONST_RRG_DEFAULT_TIMEOUT_MS 10
+#define CONST_RRG_DEFAULT_TIMEOUT_MS 50
 
 /**
  * @def MODBUS_REGISTER_SETPOINT

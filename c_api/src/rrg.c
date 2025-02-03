@@ -120,9 +120,21 @@ int RRG_SetFlow(RRG_Handle *RRG_RESTRICT handle, float setpoint)
 int RRG_GetFlow(RRG_Handle *RRG_RESTRICT handle, float *RRG_RESTRICT flow)
 {
     // 1. Validate input parameters.
-    if (!handle || !handle->modbus_ctx || !flow)
+    if (!handle)
     {
-        RRG_DEBUG_MSG("'handle' or 'handle->modbus_ctx' or 'flow' is NULL");
+        RRG_DEBUG_MSG("'handle' is NULL");
+        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
+        return RRG_ERR;
+    }
+    if (!handle->modbus_ctx)
+    {
+        RRG_DEBUG_MSG("'handle->modbus_ctx' is NULL")
+        _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
+        return RRG_ERR;
+    }
+    if (!flow)
+    {
+        RRG_DEBUG_MSG("'flow' is NULL");
         _setGlobalError(ERROR_RRG_INVALID_PARAMETER);
         return RRG_ERR;
     }
@@ -213,22 +225,22 @@ const char *RRG_GetLastError()
     switch (RRG_GlobalError)
     {
     case RRG_OK:
-        return "No error.";
+        return "No error.\n";
     case ERROR_RRG_FAILED_CONNECT:
-        return "Connection to the MODBUS device failed.";
+        return "Error: Connection to the MODBUS device failed.\n";
     case ERROR_RRG_FAILED_CREATE_CONTEXT:
-        return "Failed to create a MODBUS-RTU context.";
+        return "Error: Failed to create a MODBUS-RTU context.\n";
     case ERROR_RRG_FAILED_SET_SLAVE:
-        return "Failed to set MODBUS slave ID.";
+        return "Error: Failed to set MODBUS slave ID.\n";
     case ERROR_RRG_FAILED_SET_TIMEOUT:
-        return "Failed to set MODBUS response timeout.";
+        return "Error: Failed to set MODBUS response timeout.\n";
     case ERROR_RRG_FAILED_READ_REGISTER:
-        return "Failed to read a MODBUS register.";
+        return "Error: Failed to read a MODBUS register.\n";
     case ERROR_RRG_FAILED_WRITE_REGISTER:
-        return "Failed to write a MODBUS register.";
+        return "Error: Failed to write a MODBUS register.\n";
     case ERROR_RRG_INVALID_PARAMETER:
-        return "Invalid parameter provided to function.";
+        return "Error: Invalid parameter provided to function.\n";
     default:
-        return "Unknown error occurred.";
+        return "Unknown error occurred.\n";
     }
 }
