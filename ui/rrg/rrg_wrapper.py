@@ -45,7 +45,6 @@ except OSError as e:
 class RRGConfig(ctypes.Structure):
     """
     @brief Represents the configuration parameters for establishing an RRG connection.
-    
     Maps to the C structure `RRG_Config` defined in the header.
     """
     _fields_ = [
@@ -55,10 +54,10 @@ class RRGConfig(ctypes.Structure):
         ("timeout", c_int),    # Timeout for response in milliseconds
     ]
 
+
 class RRGHandle(ctypes.Structure):
     """
     @brief Represents the internal handle used for communication with the RRG device.
-    
     Maps to the C structure `RRG_Handle` defined in the header.
     """
     _fields_ = [
@@ -117,7 +116,6 @@ class IRRG:
 class RRG(IRRG):
     """
     @brief Python wrapper for the RRG C API.
-    
     Provides a high-level interface to communicate with the gas flow regulator.
     """
     def __init__(self, port: str, baudrate: int = 38400, slave_id: int = 1, timeout: int = 50) -> None:
@@ -164,12 +162,10 @@ class RRG(IRRG):
         logger.info("Attempting to initialize RRG device with config: port=%s, baudrate=%d, slave_id=%d, timeout=%d",
                     self._config.port.decode('utf-8') if self._config.port else "None",
                     self._config.baudrate, self._config.slave_id, self._config.timeout)
-        
         if not self._handle:
             logger.error("RRG_Init did not create a valid handle. Last error: %s", self.get_last_error())
             return False
         result = rrg_lib.RRG_Init(ctypes.byref(self._config), ctypes.byref(self._handle))
-    
         error_message = self.get_last_error()
         if error_message and error_message != "No error.":
             logger.warning("RRG_GetLastError returned: %s", error_message)
