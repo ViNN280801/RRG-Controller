@@ -1,5 +1,5 @@
-#ifndef RRG_LIB_H
-#define RRG_LIB_H
+#ifndef RRG_H
+#define RRG_H
 
 #include "rrg_constants.h"
 #include "rrg_errors.h"
@@ -163,4 +163,4 @@ RRG_API const char *RRG_GetLastError() RRG_PURE;
 
 RRG_END_DECLS
 
-#endif // !RRG_LIB_H
+#endif // !RRG_H
