@@ -69,9 +69,9 @@ int main()
         }
 
         config.port = port;
-        config.baudrate = CONST_RRG_DEFAULT_BAUDRATE;
+        config.baudrate = RRG_DEFAULT_BAUDRATE;
         config.slave_id = 1;
-        config.timeout = CONST_RRG_DEFAULT_TIMEOUT_MS;
+        config.timeout = RRG_DEFAULT_TIMEOUT_MS;
 
         printf("Found active port: %s\n", port);
 
