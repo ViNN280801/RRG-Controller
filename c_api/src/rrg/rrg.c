@@ -1,6 +1,4 @@
-#include <errno.h>
 #include <modbus/modbus.h>
-#include <stdio.h>
 
 #include "rrg.h"
 #include "rrg_constants.h"
