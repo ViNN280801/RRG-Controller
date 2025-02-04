@@ -1,4 +1,6 @@
-from .rrg import __all__ as rrg_all
-from .windows import __all__ as windows_all
+# ПНППК/__init__.py
 
-__all__ = ["rrg_all", "windows_all"]
+from .src import __all__ as src_all
+from .gui import __all__ as windows_all
+
+__all__ = ["src_all", "windows_all"]
