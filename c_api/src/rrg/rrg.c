@@ -52,8 +52,9 @@ int RRG_Init(const RRG_Config *RRG_RESTRICT config, RRG_Handle *RRG_RESTRICT han
         return RRG_ERR;
     }
 
-    // 6. Store the context in the handle.
+    // 6. Store the context in the handle and check it on NULL.
     handle->modbus_ctx = ctx;
+    RRG_CHECK_PTR_WITH_RETURN(handle->modbus_ctx);
 
     _resetGlobalError();
     return RRG_OK;
