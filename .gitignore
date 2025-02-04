@@ -19,3 +19,7 @@ Makefile
 # Executable files
 rrg_live_test
 relay_live_test
+
+# Pyinstaller files
+dist/
+*.spec*

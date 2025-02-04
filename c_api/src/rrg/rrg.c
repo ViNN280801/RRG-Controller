@@ -1,6 +1,4 @@
-#include <errno.h>
 #include <modbus/modbus.h>
-#include <stdio.h>
 
 #include "rrg.h"
 #include "rrg_constants.h"
@@ -16,8 +14,8 @@ int RRG_Init(const RRG_Config *RRG_RESTRICT config, RRG_Handle *RRG_RESTRICT han
 
     // 2. Initialize MODBUS-RTU context using default serial configuration.
     modbus_t *ctx = modbus_new_rtu(
-        config->port, config->baudrate, CONST_RRG_DEFAULT_PARITY,
-        CONST_RRG_DEFAULT_DATA_BITS, CONST_RRG_DEFAULT_STOP_BITS);
+        config->port, config->baudrate, RRG_DEFAULT_PARITY,
+        RRG_DEFAULT_DATA_BITS, RRG_DEFAULT_STOP_BITS);
     if (unlikely(!ctx))
     {
         RRG_MODBUS_DEBUG_MSG;

@@ -28,7 +28,7 @@ else:
 # Build the path relative to the current file's directory.
 # Assuming this file is in ui/rrg/rrg_wrapper.py, the shared library is in "../resources/"
 current_dir = os.path.dirname(os.path.abspath(__file__))
-lib_path = os.path.join(current_dir, "..", "resources", lib_filename)
+lib_path = os.path.join(current_dir, "../..", "resources", lib_filename)
 lib_path = os.path.abspath(lib_path)
 
 # Optionally print the library path for debugging.
@@ -118,7 +118,7 @@ class RRG(IRRG):
     @brief Python wrapper for the RRG C API.
     Provides a high-level interface to communicate with the gas flow regulator.
     """
-    def __init__(self, port: str, baudrate: int = 38400, slave_id: int = 1, timeout: int = 50) -> None:
+    def __init__(self, port: str, baudrate: int, slave_id: int, timeout: int) -> None:
         """
         @brief Initializes an RRG instance with the given connection parameters.
         @param port Serial port name (e.g., "COM3" or "/dev/ttyUSB0").
@@ -129,7 +129,7 @@ class RRG(IRRG):
         logger.debug("Initializing RRG with port=%s, baudrate=%d, slave_id=%d, timeout=%d",
                      port, baudrate, slave_id, timeout)
         self._config = RRGConfig(port.encode("utf-8"), baudrate, slave_id, timeout)
-        self._handle = RRGHandle()  # Create an instance of our RRGHandle structure.
+        self._handle = RRGHandle()
         self._setup_functions()
 
     def _setup_functions(self) -> None:

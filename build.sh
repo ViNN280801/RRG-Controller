@@ -16,6 +16,10 @@ make || exit 1
 cd ..
 cp -v $LIBRRG_PATH $LIBRRG_RESOURCES_PATH
 cp -v $LIBRRG_PATH ./librrg.so
+
+cp -v $LIBRELAY_PATH $LIBRELAY_RESOURCES_PATH
+cp -v $LIBRELAY_PATH ./librelay.so
+
 cp -v $RRG_LIVE_TEST_PATH ./rrg_live_test
 
 rm -rf build/
