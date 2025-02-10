@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from re import I
 import sys
 import signal
 import traceback
