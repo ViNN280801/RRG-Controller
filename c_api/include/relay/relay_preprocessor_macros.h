@@ -1,7 +1,8 @@
 #ifndef RELAY_PREPROCESSOR_MACROS_H
 #define RELAY_PREPROCESSOR_MACROS_H
 
-/* Cross-platform definition of the `restrict` keyword for compiler optimization. */
+/* Cross-platform definition of the `restrict` keyword for compiler
+ * optimization. */
 #if defined(_MSC_VER)
 #define RELAY_RESTRICT __restrict
 #elif defined(__GNUC__) || defined(__clang__)
@@ -22,9 +23,7 @@
 #endif
 
 #ifdef __cplusplus
-#define RELAY_BEGIN_DECLS \
-    extern "C"            \
-    {
+#define RELAY_BEGIN_DECLS extern "C" {
 #define RELAY_END_DECLS }
 #else
 #define RELAY_BEGIN_DECLS
@@ -45,10 +44,6 @@
 #define RELAY_HOT __attribute__((hot))
 #define RELAY_PURE __attribute__((pure))
 #define RELAY_CONST __attribute__((const))
-#elif defined(_MSC_VER)
-#define RELAY_HOT __forceinline
-#define RELAY_PURE __declspec(noalias)
-#define RELAY_CONST __declspec(noalias)
 #else
 #define RELAY_HOT
 #define RELAY_PURE
@@ -70,9 +65,14 @@
 #define RELAY_DEBUG_ARGS __FILE__, __LINE__, RELAY_COMMON_PRETTY_FUNC
 
 #ifdef RELAY_DEBUG
-#define RELAY_MODBUS_DEBUG_MSG fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS, modbus_strerror(errno));
-#define RELAY_DEBUG_MSG(msg) fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS, msg);
-#define RELAY_DEBUG_GET_LAST_ERR fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS, RELAY_GetLastError());
+#define RELAY_MODBUS_DEBUG_MSG                                                 \
+    fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS,                \
+            modbus_strerror(errno));
+#define RELAY_DEBUG_MSG(msg)                                                   \
+    fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS, msg);
+#define RELAY_DEBUG_GET_LAST_ERR                                               \
+    fprintf(stderr, RELAY_DEBUG_FMT ": %s\n", RELAY_DEBUG_ARGS,                \
+            RELAY_GetLastError());
 #else
 #define RELAY_MODBUS_DEBUG_MSG
 #define RELAY_DEBUG_MSG(msg)

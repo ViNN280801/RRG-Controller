@@ -1,4 +1,8 @@
+#ifdef _WIN32
+#include "modbus.h"
+#else
 #include <modbus/modbus.h>
+#endif
 
 #include "relay.h"
 #include "relay_constants.h"

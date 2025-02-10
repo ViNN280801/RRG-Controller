@@ -45,10 +45,6 @@
 #define RRG_HOT __attribute__((hot))
 #define RRG_PURE __attribute__((pure))
 #define RRG_CONST __attribute__((const))
-#elif defined(_MSC_VER)
-#define RRG_HOT __forceinline
-#define RRG_PURE __declspec(noalias)
-#define RRG_CONST __declspec(noalias)
 #else
 #define RRG_HOT
 #define RRG_PURE
