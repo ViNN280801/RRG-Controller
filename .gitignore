@@ -23,3 +23,10 @@ relay_live_test
 # Pyinstaller files
 dist/
 *.spec*
+
+# Archives
+*.rar
+*.zip
+*.7z
+*.tar*
+
