@@ -20,7 +20,7 @@ RRG_DEFAULT_BAUDRATE = 38400
 RRG_DEFAULT_TIMEOUT = 50
 RRG_DEFAULT_SLAVE_ID = 1
 
-PLOT_UPDATE_TIME_TICK_MS = 5000
+PLOT_UPDATE_TIME_TICK_MS = 50
 
 
 class RRGControlWindow(QtWidgets.QMainWindow):
@@ -138,18 +138,18 @@ class RRGControlWindow(QtWidgets.QMainWindow):
 
     def _open_connections(self):
         # 1. Connect to the relay
-        # relay_port = self.combo_port_1.currentText()
-        # relay_err = self.relay_controller.TurnOn(
-        #     relay_port,
-        #     self.relay_config_dict.get('baudrate', RELAY_DEFAULT_BAUDRATE),
-        #     self.relay_config_dict.get('slave_id', RELAY_DEFAULT_SLAVE_ID),
-        #     self.relay_config_dict.get('timeout', RELAY_DEFAULT_TIMEOUT)
-        # )
-        # if relay_err != self.relay_controller.RELAY_OK:
-        #     self._relay_show_error_msg()
-        #     return
-        # else:
-        #     self._log_message(f"Relay device connected on port {relay_port}.")
+        relay_port = self.combo_port_1.currentText()
+        relay_err = self.relay_controller.TurnOn(
+            relay_port,
+            self.relay_config_dict.get('baudrate', RELAY_DEFAULT_BAUDRATE),
+            self.relay_config_dict.get('slave_id', RELAY_DEFAULT_SLAVE_ID),
+            self.relay_config_dict.get('timeout', RELAY_DEFAULT_TIMEOUT)
+        )
+        if relay_err != self.relay_controller.RELAY_OK:
+            self._relay_show_error_msg()
+            return
+        else:
+            self._log_message(f"Relay device connected on port {relay_port}.")
 
         # 2. Connect to the Gas Flow Regulator
         rrg_port = self.combo_port_2.currentText()
