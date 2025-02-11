@@ -28,7 +28,6 @@ if (Test-Path $BUILD_DIR) { Remove-Item -Recurse -Force $BUILD_DIR }
 Write-Host "Building executable..."
 python -m PyInstaller --noconfirm `
 					  --onefile `
-
 					  --windowed `
 					  --clean `
 				      --log-level "INFO" `
